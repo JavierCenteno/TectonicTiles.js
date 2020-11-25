@@ -1,0 +1,90 @@
+<!--
+Copyright 2020 Javier Centeno Vega
+
+This file is part of TectonicTiles.js.
+
+TectonicTiles.js is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+TectonicTiles.js is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with TectonicTiles.js. If not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" type="text/css" href="Style.css">
+		<link rel="icon" href="img/logo.ico">
+		<script type="text/javascript" src="js/I18n.js" defer></script>
+		<script type="text/javascript" src="js/Random.js" defer></script>
+		<script type="text/javascript" src="js/LandGeneration.js" defer></script>
+		<script type="text/javascript" src="js/WaterGeneration.js" defer></script>
+		<script type="text/javascript" src="js/MagmaGeneration.js" defer></script>
+		<script type="text/javascript" src="js/Terrain.js" defer></script>
+		<script type="text/javascript" src="js/TectonicTiles.js" defer></script>
+	</head>
+	<body>
+		<div id="language" class="sectionContainer">
+			<select id="languageSelector" onchange="setLanguage()">
+				<!--<option value="ca">Català</option>-->
+				<!--<option value="cs">Čeština</option>-->
+				<!--<option value="de">Deutsch</option>-->
+				<option value="en" selected="selected">English</option>
+				<option value="es">Español</option>
+				<!--<option value="eu">Euskara</option>-->
+				<!--<option value="fr">Français</option>-->
+				<!--<option value="gl">Galego</option>-->
+				<!--<option value="it">Italiano</option>-->
+				<!--<option value="nl">Nederlands</option>-->
+				<!--<option value="pl">Polski</option>-->
+				<!--<option value="pt">Português</option>-->
+				<!--<option value="ru">Русский</option>-->
+				<!--<option value="zh">中文</option>-->
+			</select>
+		</div>
+		<div id="randomGeneratorInputs" class="sectionContainer">
+			<span class="i18n" i18nKey="random.seed"></span>
+			<input type="text" id="randomGeneratorSeed"></input>
+		</div>
+		<div id="terrainInputs" class="sectionContainer">
+			<span class="i18n" i18nKey="terrain.type"></span>
+			<select id="terrainType" onchange="setTerrainType()">
+				<option value="squareTerrain" class="i18n" i18nKey="terrain.type.square" selected="selected"></option>
+			</select>
+			<div id="terrainParameters" class="parameterContainer">
+			</div>
+		</div>
+		<div id="landGenerationInputs" class="sectionContainer">
+			<span class="i18n" i18nKey="landGeneration.type"></span>
+			<select id="landGenerationType" onchange="setLandGenerationType()">
+				<option value="smoothstepLandGeneration" class="i18n" i18nKey="landGeneration.type.smoothstep" selected="selected"></option>
+				<option value="ondulationLandGeneration" class="i18n" i18nKey="landGeneration.type.ondulation"></option>
+			</select>
+			<div id="landGenerationParameters" class="parameterContainer">
+			</div>
+		</div>
+		<!--<div id="waterGenerationInputs" class="sectionContainer">
+			<span class="i18n" i18nKey="waterGeneration.type"></span>
+			<select id="waterGenerationType" onchange="setWaterGenerationType()">
+				<option value="noWaterGeneration" class="i18n" i18nKey="waterGeneration.type.none" selected="selected"></option>
+				<option value="flatWaterGeneration" class="i18n" i18nKey="waterGeneration.type.flat"></option>
+			</select>
+			<div id="waterGenerationParameters" class="parameterContainer">
+			</div>
+		</div>
+		<div id="magmaGenerationInputs" class="sectionContainer">
+			<span class="i18n" i18nKey="magmaGeneration.type"></span>
+			<select id="magmaGenerationType" onchange="setMagmaGenerationType()">
+				<option value="noMagmaGeneration" class="i18n" i18nKey="magmaGeneration.type.none" selected="selected"></option>
+				<option value="flatMagmaGeneration" class="i18n" i18nKey="magmaGeneration.type.flat"></option>
+			</select>
+			<div id="magmaGenerationParameters" class="parameterContainer">
+			</div>
+		</div>-->
+		<div id="generation" class="sectionContainer">
+			<button type="button" onclick="generateAndPrintTerrain();"><span class="i18n" i18nKey="generate"></span></button>
+			<div id="printingOutput" class="imageContainer">
+			</div>
+		</div>
+	</body>
+</html>

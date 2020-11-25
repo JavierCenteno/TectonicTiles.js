@@ -1,0 +1,53 @@
+/* 
+ * Style.css
+ * 
+ * Copyright 2020 Javier Centeno Vega
+ * 
+ * This file is part of TectonicTiles.js.
+ * 
+ * TectonicTiles.js is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * TectonicTiles.js is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with TectonicTiles.js. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+* {
+	font-family: sans-serif;
+	font-size: 16px;
+	vertical-align: baseline;
+}
+
+.sectionContainer {
+	margin: 8px;
+	padding: 4px;
+	border-style: solid;
+	border-color: #bbbbbb;
+	border-width: 4px;
+	border-radius: 8px;
+	background-color: #eeeeee;
+}
+
+.parameterContainer {
+	display: grid;
+	grid-template-columns: max-content max-content;
+	margin: 4px;
+	padding: 4px;
+	border-style: inherit;
+	border-color: inherit;
+	border-width: inherit;
+	border-radius: inherit;
+	background-color: inherit;
+	vertical-align: middle;
+}
+
+.imageContainer {
+	display: table;
+	margin: 4px;
+	padding: 4px;
+	border-style: inherit;
+	border-color: inherit;
+	border-width: inherit;
+	border-radius: inherit;
+	background-color: inherit;
+}
