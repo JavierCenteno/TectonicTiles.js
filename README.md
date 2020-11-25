@@ -10,6 +10,8 @@
 
 <p>Tectonic tiles is a random terrain generation algorithm inspired by plate tectonics.</p>
 
+<p><a href="https://javiercenteno.github.io/TectonicTiles.js/TectonicTiles.html" title="Working implementation">You can see the algorithm working here.</a></p>
+
 
 
 <h2>The algorithm</h2>
