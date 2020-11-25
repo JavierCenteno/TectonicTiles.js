@@ -208,6 +208,9 @@ class SmoothstepLandGeneration extends LandGeneration {
 	}
 
 	getValueAt(pointX, pointY) {
+		if (this.startPointX == this.endPointX && this.startPointY == this.endPointY) {
+			return 0
+		}
 		var x = 1 - (euclideanDistance(pointX, pointY, this.endPointX, this.endPointY) / this.radius)
 		return this.height * Interpolations.smoothstep(x)
 	}
