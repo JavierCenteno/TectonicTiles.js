@@ -42,6 +42,9 @@ function setLandGenerationType() {
 		case "smoothstepLandGeneration":
 			landGeneration = new SmoothstepLandGeneration()
 			break
+		case "smoothstepPowerLandGeneration":
+			landGeneration = new SmoothstepPowerLandGeneration()
+			break
 		case "ondulationLandGeneration":
 			landGeneration = new OndulationLandGeneration()
 			break

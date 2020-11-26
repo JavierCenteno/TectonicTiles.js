@@ -130,6 +130,19 @@ class Interpolations {
 		}
 	}
 
+	static smoothstepPower(x, k) {
+		if (x <= 0) {
+			return 0
+		} else if (x >= 1) {
+			return 1
+		} else {
+			x = Math.pow(x, k)
+			var x_2 = x * x
+			var x_3 = x_2 * x
+			return 3 * x_2 - 2 * x_3
+		}
+	}
+
 	static continuousSmoothstep(x) {
 		x = x % 2
 		if(x < 0) {
@@ -157,21 +170,12 @@ class SmoothstepLandGeneration extends LandGeneration {
 
 	setUp() {
 		var landGenerationParameters = document.getElementById("landGenerationParameters")
-		// Create input field for radiusFactor
-		createNumberInput(landGenerationParameters, "radiusFactorInput", "landGeneration.property.radiusFactor", 2, null, null, null)
-		// Create input field for radiusPower
-		createNumberInput(landGenerationParameters, "radiusPowerInput", "landGeneration.property.radiusPower", 1, null, null, null)
-		// Create input field for heightFactor
-		createNumberInput(landGenerationParameters, "heightFactorInput", "landGeneration.property.heightFactor", 1, null, null, null)
-		// Create input field for heightPower
-		createNumberInput(landGenerationParameters, "heightPowerInput", "landGeneration.property.heightPower", 1, null, null, null)
+		// Create input field for mountain radius
+		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
 	}
 
 	readParameters() {
-		this.radiusFactor = document.getElementById("radiusFactorInput").value
-		this.radiusPower = document.getElementById("radiusPowerInput").value
-		this.heightFactor = document.getElementById("heightFactorInput").value
-		this.heightPower = document.getElementById("heightPowerInput").value
+		this.mountainRadius = document.getElementById("mountainRadiusInput").value
 	}
 
 	takeDown() {
@@ -203,8 +207,8 @@ class SmoothstepLandGeneration extends LandGeneration {
 		this.endPointX = endPointX
 		this.endPointY = endPointY
 		var distance = euclideanDistance(startPointX, startPointY, endPointX, endPointY)
-		this.radius = this.radiusFactor * Math.pow(distance, this.radiusPower)
-		this.height = this.heightFactor * Math.pow(distance, this.heightPower)
+		this.radius = this.mountainRadius
+		this.height = distance
 	}
 
 	getValueAt(pointX, pointY) {
@@ -213,6 +217,64 @@ class SmoothstepLandGeneration extends LandGeneration {
 		}
 		var x = 1 - (euclideanDistance(pointX, pointY, this.endPointX, this.endPointY) / this.radius)
 		return this.height * Interpolations.smoothstep(x)
+	}
+
+}
+
+class SmoothstepPowerLandGeneration extends LandGeneration {
+
+	setUp() {
+		var landGenerationParameters = document.getElementById("landGenerationParameters")
+		// Create input field for mountain radius
+		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
+		// Create input field for continent radius
+		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 15, null, null, null)
+	}
+
+	readParameters() {
+		this.mountainRadius = document.getElementById("mountainRadiusInput").value
+		this.continentRadius = document.getElementById("continentRadiusInput").value
+	}
+
+	takeDown() {
+		landGenerationParameters = document.getElementById("landGenerationParameters")
+		while(landGenerationParameters.hasChildNodes()) {
+			landGenerationParameters.removeChild(landGenerationParameters.lastChild)
+		}
+	}
+
+	getMinimumBoundaryX() {
+		return this.endPointX - Math.ceil(this.radius)
+	}
+
+	getMaximumBoundaryX() {
+		return this.endPointX + Math.ceil(this.radius)
+	}
+
+	getMinimumBoundaryY() {
+		return this.endPointY - Math.ceil(this.radius)
+	}
+
+	getMaximumBoundaryY() {
+		return this.endPointY + Math.ceil(this.radius)
+	}
+
+	setPoints(startPointX, startPointY, endPointX, endPointY) {
+		this.startPointX = startPointX
+		this.startPointY = startPointY
+		this.endPointX = endPointX
+		this.endPointY = endPointY
+		var distance = euclideanDistance(startPointX, startPointY, endPointX, endPointY)
+		this.radius = this.continentRadius
+		this.height = distance
+	}
+
+	getValueAt(pointX, pointY) {
+		if (this.startPointX == this.endPointX && this.startPointY == this.endPointY) {
+			return 0
+		}
+		var x = 1 - (euclideanDistance(pointX, pointY, this.endPointX, this.endPointY) / this.radius)
+		return this.height * Interpolations.smoothstepPower(x, this.continentRadius / this.mountainRadius)
 	}
 
 }
@@ -285,7 +347,6 @@ class OndulationLandGeneration extends LandGeneration {
 		// rotatedX, rotatedY are the coordinates of the point if we rotate the system of coordinates so that the start point and the end point both fall in the x axis of coordinates
 		var rotatedX = relativeX * this.cosine_theta + relativeY * this.sine_theta
 		// var rotatedY = -relativeX * this.sine_theta + relativeY * this.cosine_theta
-		// we use cosine to create an ondulation
 		var z = Interpolations.continuousSmoothstep(rotatedX / this.radius)
 		return this.height*z
 	}
