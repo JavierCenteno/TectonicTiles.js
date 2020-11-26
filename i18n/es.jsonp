@@ -14,6 +14,7 @@ setI18nData({
 "terrain.property.wrapAroundY": "da la vuelta a lo largo de su altura",
 "landGeneration.type": "tipo de generación de terreno",
 "landGeneration.type.smoothstep": "smoothstep",
+"landGeneration.type.smoothstepPower": "smoothstep con potencia",
 "landGeneration.type.ondulation": "ondas",
 "landGeneration.property.mountainRadius": "radio de montaña",
 "landGeneration.property.continentRadius": "radio de continente",

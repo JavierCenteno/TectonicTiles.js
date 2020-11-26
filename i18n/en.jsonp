@@ -14,6 +14,7 @@ setI18nData({
 "terrain.property.wrapAroundY": "wrap around heightwise",
 "landGeneration.type": "land generation type",
 "landGeneration.type.smoothstep": "smoothstep",
+"landGeneration.type.smoothstepPower": "smoothstep with power",
 "landGeneration.type.ondulation": "waves",
 "landGeneration.property.mountainRadius": "mountain radius",
 "landGeneration.property.continentRadius": "continent radius",
