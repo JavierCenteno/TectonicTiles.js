@@ -283,21 +283,12 @@ class OndulationLandGeneration extends LandGeneration {
 
 	setUp() {
 		var landGenerationParameters = document.getElementById("landGenerationParameters")
-		// Create input field for radiusFactor
-		createNumberInput(landGenerationParameters, "radiusFactorInput", "landGeneration.property.radiusFactor", 2, null, null, null)
-		// Create input field for radiusPower
-		createNumberInput(landGenerationParameters, "radiusPowerInput", "landGeneration.property.radiusPower", 1, null, null, null)
-		// Create input field for heightFactor
-		createNumberInput(landGenerationParameters, "heightFactorInput", "landGeneration.property.heightFactor", 1, null, null, null)
-		// Create input field for heightPower
-		createNumberInput(landGenerationParameters, "heightPowerInput", "landGeneration.property.heightPower", 1, null, null, null)
+		// Create input field for mountain radius
+		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
 	}
 
 	readParameters() {
-		this.radiusFactor = document.getElementById("radiusFactorInput").value
-		this.radiusPower = document.getElementById("radiusPowerInput").value
-		this.heightFactor = document.getElementById("heightFactorInput").value
-		this.heightPower = document.getElementById("heightPowerInput").value
+		this.mountainRadius = document.getElementById("mountainRadiusInput").value
 	}
 
 	takeDown() {
@@ -329,8 +320,8 @@ class OndulationLandGeneration extends LandGeneration {
 		this.endPointX = endPointX
 		this.endPointY = endPointY
 		var distance = euclideanDistance(startPointX, startPointY, endPointX, endPointY)
-		this.radius = this.radiusFactor * Math.pow(distance, this.radiusPower)
-		this.height = this.heightFactor * Math.pow(distance, this.heightPower)
+		this.radius = this.mountainRadius
+		this.height = distance
 		// theta is the angle between the x axis and the line between the start point and the end point
 		this.theta = Math.atan((this.endPointY - this.startPointY)/(this.endPointX - this.startPointX))
 		this.sine_theta = Math.sin(this.theta)
@@ -357,21 +348,15 @@ class EggCartonLandGeneration extends LandGeneration {
 
 	setUp() {
 		var landGenerationParameters = document.getElementById("landGenerationParameters")
-		// Create input field for radiusFactor
-		createNumberInput(landGenerationParameters, "radiusFactorInput", "landGeneration.property.radiusFactor", 2, null, null, null)
-		// Create input field for radiusPower
-		createNumberInput(landGenerationParameters, "radiusPowerInput", "landGeneration.property.radiusPower", 1, null, null, null)
-		// Create input field for heightFactor
-		createNumberInput(landGenerationParameters, "heightFactorInput", "landGeneration.property.heightFactor", 1, null, null, null)
-		// Create input field for heightPower
-		createNumberInput(landGenerationParameters, "heightPowerInput", "landGeneration.property.heightPower", 1, null, null, null)
+		// Create input field for mountain radius
+		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
+		// Create input field for continent radius
+		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 15, null, null, null)
 	}
 
 	readParameters() {
-		this.radiusFactor = document.getElementById("radiusFactorInput").value
-		this.radiusPower = document.getElementById("radiusPowerInput").value
-		this.heightFactor = document.getElementById("heightFactorInput").value
-		this.heightPower = document.getElementById("heightPowerInput").value
+		this.mountainRadius = document.getElementById("mountainRadiusInput").value
+		this.continentRadius = document.getElementById("continentRadiusInput").value
 	}
 
 	takeDown() {
@@ -403,8 +388,8 @@ class EggCartonLandGeneration extends LandGeneration {
 		this.endPointX = endPointX
 		this.endPointY = endPointY
 		var distance = euclideanDistance(startPointX, startPointY, endPointX, endPointY)
-		this.radius = this.radiusFactor * Math.pow(distance, this.radiusPower)
-		this.height = this.heightFactor * Math.pow(distance, this.heightPower)
+		this.radius = this.mountainRadius
+		this.height = distance
 		// theta is the angle between the x axis and the line between the start point and the end point
 		this.theta = Math.atan((this.endPointY - this.startPointY)/(this.endPointX - this.startPointX))
 		this.sine_theta = Math.sin(this.theta)
