@@ -228,7 +228,7 @@ class SmoothstepPowerLandGeneration extends LandGeneration {
 		// Create input field for mountain radius
 		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
 		// Create input field for continent radius
-		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 15, null, null, null)
+		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 30, null, null, null)
 	}
 
 	readParameters() {
@@ -285,10 +285,13 @@ class OndulationLandGeneration extends LandGeneration {
 		var landGenerationParameters = document.getElementById("landGenerationParameters")
 		// Create input field for mountain radius
 		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
+		// Create input field for continent radius
+		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 30, null, null, null)
 	}
 
 	readParameters() {
 		this.mountainRadius = document.getElementById("mountainRadiusInput").value
+		this.continentRadius = document.getElementById("continentRadiusInput").value
 	}
 
 	takeDown() {
@@ -339,7 +342,9 @@ class OndulationLandGeneration extends LandGeneration {
 		var rotatedX = relativeX * this.cosine_theta + relativeY * this.sine_theta
 		// var rotatedY = -relativeX * this.sine_theta + relativeY * this.cosine_theta
 		var z = Interpolations.continuousSmoothstep(rotatedX / this.radius)
-		return this.height*z
+		// multiply z by the height of a smoothstep crease centered at the end point with continentRadius width
+		z = z * Interpolations.smoothstep(1 - (euclideanDistance(pointX, pointY, this.endPointX, this.endPointY) / this.continentRadius))
+		return this.height * z
 	}
 
 }
@@ -351,7 +356,7 @@ class EggCartonLandGeneration extends LandGeneration {
 		// Create input field for mountain radius
 		createNumberInput(landGenerationParameters, "mountainRadiusInput", "landGeneration.property.mountainRadius", 15, null, null, null)
 		// Create input field for continent radius
-		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 15, null, null, null)
+		createNumberInput(landGenerationParameters, "continentRadiusInput", "landGeneration.property.continentRadius", 30, null, null, null)
 	}
 
 	readParameters() {
@@ -412,8 +417,10 @@ class EggCartonLandGeneration extends LandGeneration {
 		// interpolatedX, interpolatedY are the heights of the point
 		var interpolatedX = Interpolations.continuousSmoothstep(dividedX)
 		var interpolatedY = Interpolations.continuousSmoothstep(dividedY)
-		var z = interpolatedX * interpolatedY * this.height
-		return z
+		var z = interpolatedX * interpolatedY
+		// multiply z by the height of a smoothstep crease centered at the end point with continentRadius width
+		z = z * Interpolations.smoothstep(1 - (euclideanDistance(pointX, pointY, this.endPointX, this.endPointY) / this.continentRadius))
+		return this.height * z
 	}
 
 }

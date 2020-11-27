@@ -48,6 +48,9 @@ function setLandGenerationType() {
 		case "ondulationLandGeneration":
 			landGeneration = new OndulationLandGeneration()
 			break
+		case "eggCartonLandGeneration":
+			landGeneration = new EggCartonLandGeneration()
+			break
 		default:
 			landGeneration = undefined
 	}
