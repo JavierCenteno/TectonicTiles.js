@@ -42,7 +42,7 @@ class FlatWaterGeneration extends WaterGeneration {
 	setUp() {
 		var waterGenerationParameters = document.getElementById("waterGenerationParameters")
 		// Create input field for seaLevel
-		createNumberInput(waterGenerationParameters, "seaLevelInput", "waterGeneration.property.seaLevel", 2, null, null, null)
+		createNumberInput(waterGenerationParameters, "seaLevelInput", "waterGeneration.property.seaLevel", 15, null, null, null)
 	}
 
 	readParameters() {

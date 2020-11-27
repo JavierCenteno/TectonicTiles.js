@@ -42,7 +42,7 @@ class FlatMagmaGeneration extends MagmaGeneration {
 	setUp() {
 		var magmaGenerationParameters = document.getElementById("magmaGenerationParameters")
 		// Create input field for crustThickness
-		createNumberInput(magmaGenerationParameters, "crustThicknessInput", "magmaGeneration.property.crustThickness", 2, null, null, null)
+		createNumberInput(magmaGenerationParameters, "crustThicknessInput", "magmaGeneration.property.crustThickness", 10, null, null, null)
 	}
 
 	readParameters() {

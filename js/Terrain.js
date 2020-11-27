@@ -139,14 +139,17 @@ class SquareTerrain extends Terrain {
 		return layerTiles
 	}
 
-	generate(landGeneration) {
+	generate(landGeneration, waterGeneration, magmaGeneration) {
 		super.generate()
 		landGeneration.readParameters()
 		this.readParameters()
+		// remove all layers
+		this.terrainLayers = {}
+		// add land layer
 		var landLayer = this.addLayer("land")
 		// For each tectonic plate
-		for (var plateX = 0; plateX < this.numberOfPlatesX; ++plateX) {
-			for (var plateY = 0; plateY < this.numberOfPlatesY; ++plateY) {
+		for (var plateY = 0; plateY < this.numberOfPlatesY; ++plateY) {
+			for (var plateX = 0; plateX < this.numberOfPlatesX; ++plateX) {
 				// Select the start and end points as the coordinates of random tiles inside the plate
 				var startTileX = Number(randomGenerator.randomIntegerInRange(this.plateSizeX * plateX, this.plateSizeX * (plateX + 1)))
 				var startTileY = Number(randomGenerator.randomIntegerInRange(this.plateSizeY * plateY, this.plateSizeY * (plateY + 1)))
@@ -159,10 +162,30 @@ class SquareTerrain extends Terrain {
 				var minLandGenerationY = Math.max(0, landGeneration.getMinimumBoundaryY())
 				var maxLandGenerationY = Math.min(this.terrainSizeY - 1, landGeneration.getMaximumBoundaryY())
 				// Add the results of the land generation function for all tiles in the terrain
-				for (var tileX = minLandGenerationX; tileX <= maxLandGenerationX; ++tileX) {
-					for (var tileY = minLandGenerationY; tileY <= maxLandGenerationY; ++tileY) {
+				for (var tileY = minLandGenerationY; tileY <= maxLandGenerationY; ++tileY) {
+					for (var tileX = minLandGenerationX; tileX <= maxLandGenerationX; ++tileX) {
 						landLayer[tileY][tileX] += landGeneration.getValueAt(tileX, tileY)
 					}
+				}
+			}
+		}
+		if(waterGeneration instanceof FlatWaterGeneration) {
+			waterGeneration.readParameters()
+			var waterLayer = this.addLayer("water")
+			// For each tile
+			for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
+				for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
+					waterLayer[tileY][tileX] = waterGeneration.seaLevel
+				}
+			}
+		}
+		if(magmaGeneration instanceof FlatMagmaGeneration) {
+			magmaGeneration.readParameters()
+			var magmaLayer = this.addLayer("magma")
+			// For each tile
+			for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
+				for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
+					magmaLayer[tileY][tileX] = -magmaGeneration.crustThickness
 				}
 			}
 		}
@@ -170,25 +193,33 @@ class SquareTerrain extends Terrain {
 
 	print() {
 		var imagePixels = new Uint8ClampedArray(this.terrainSizeX * this.terrainSizeY * 4)
-		
+		// layers
 		var landLayer = this.getLayer("land")
+		var waterLayer = this.getLayer("water")
+		var magmaLayer = this.getLayer("magma")
+		// minimums and maximums
 		var minimumTile = this.getMinimumValue()
 		var maximumTile = this.getMaximumValue()
-		var seaLevel = (maximumTile + minimumTile) / 2
-		
+		var tileRange = maximumTile - minimumTile
+		//
 		var index = 0
 		for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
 			for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
-				var tile = landLayer[tileY][tileX]
 				// colors
 				var red = 0
 				var green = 0
 				var blue = 0
-				//
-				if (tile >= seaLevel) {
-					green = 255 - Math.floor(64 * (tile - seaLevel) / (maximumTile - seaLevel))
+				// levels
+				var landLevel = landLayer[tileY][tileX]
+				if(waterLayer != undefined) {
+					var waterLevel = waterLayer[tileY][tileX]
+					if (landLevel > waterLevel) {
+						green = 255 - Math.floor(63 * (landLevel - waterLevel) / (tileRange))
+					} else {
+						blue = 255 - Math.floor(63 * (waterLevel - landLevel) / (tileRange))
+					}
 				} else {
-					blue = 255 - Math.floor(64 * (seaLevel - tile) / (seaLevel - minimumTile))
+					green = 255 - Math.floor(63 * (landLevel - minimumTile) / (tileRange))
 				}
 				// Set R channel
 				imagePixels[index++] = red
@@ -215,13 +246,14 @@ class SquareTerrain extends Terrain {
 	}
 
 	getMinimumValue() {
-		var landLayer = this.getLayer("land")
 		var minimumValue = Number.POSITIVE_INFINITY
-		for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
-			for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
-				var tile = landLayer[tileY][tileX]
-				if(isFinite(tile) && (tile < minimumValue)) {
-					minimumValue = tile
+		for (const terrainLayer of Object.values(this.getLayers())) {
+			for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
+				for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
+					var tile = terrainLayer[tileY][tileX]
+					if(isFinite(tile) && (tile < minimumValue)) {
+						minimumValue = tile
+					}
 				}
 			}
 		}
@@ -232,13 +264,14 @@ class SquareTerrain extends Terrain {
 	}
 
 	getMaximumValue() {
-		var landLayer = this.getLayer("land")
 		var maximumValue = Number.NEGATIVE_INFINITY
-		for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
-			for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
-				var tile = landLayer[tileY][tileX]
-				if(isFinite(tile) && (tile > maximumValue)) {
-					maximumValue = tile
+		for (const terrainLayer of Object.values(this.getLayers())) {
+			for (var tileY = 0; tileY < this.terrainSizeY; ++tileY) {
+				for (var tileX = 0; tileX < this.terrainSizeX; ++tileX) {
+					var tile = terrainLayer[tileY][tileX]
+					if(isFinite(tile) && (tile > maximumValue)) {
+						maximumValue = tile
+					}
 				}
 			}
 		}

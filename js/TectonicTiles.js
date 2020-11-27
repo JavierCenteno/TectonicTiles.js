@@ -60,6 +60,64 @@ function setLandGenerationType() {
 setLandGenerationType()
 
 /* 
+ * WaterGeneration
+ */
+
+waterGeneration = undefined
+
+function setWaterGenerationType() {
+	if(waterGeneration !== undefined) {
+		waterGeneration.takeDown()
+	}
+	var selectedWaterGenerationType = document.getElementById("waterGenerationType").value
+	switch(selectedWaterGenerationType) {
+		case "noWaterGeneration":
+			waterGeneration = new NoWaterGeneration()
+			break
+		case "flatWaterGeneration":
+			waterGeneration = new FlatWaterGeneration()
+			break
+		default:
+			waterGeneration = undefined
+	}
+	if(waterGeneration !== undefined) {
+		waterGeneration.setUp()
+	}
+}
+
+// Run setWaterGenerationType() so the page starts off with a water generation type set
+setWaterGenerationType()
+
+/* 
+ * MagmaGeneration
+ */
+
+magmaGeneration = undefined
+
+function setMagmaGenerationType() {
+	if(magmaGeneration !== undefined) {
+		magmaGeneration.takeDown()
+	}
+	var selectedMagmaGenerationType = document.getElementById("magmaGenerationType").value
+	switch(selectedMagmaGenerationType) {
+		case "noMagmaGeneration":
+			magmaGeneration = new NoMagmaGeneration()
+			break
+		case "flatMagmaGeneration":
+			magmaGeneration = new FlatMagmaGeneration()
+			break
+		default:
+			magmaGeneration = undefined
+	}
+	if(magmaGeneration !== undefined) {
+		magmaGeneration.setUp()
+	}
+}
+
+// Run setMagmaGenerationType() so the page starts off with a magma generation type set
+setMagmaGenerationType()
+
+/* 
  * TerrainType
  */
 
@@ -86,7 +144,7 @@ function setTerrainType() {
 setTerrainType()
 
 function generateAndPrintTerrain() {
-	terrain.generate(landGeneration)
+	terrain.generate(landGeneration, waterGeneration, magmaGeneration)
 	terrain.print()
 }
 
